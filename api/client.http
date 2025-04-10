@@ -1,0 +1,42 @@
+### Check Luis's account balance (before transaction)
+GET http://localhost:3003/balances/7ebc23f5-dd1e-4d93-9490-9fce5052a5f5 HTTP/1.1
+
+### Check Jane's account balance (before transaction)
+GET http://localhost:3003/balances/dff2d137-bba6-4138-81b9-3da7567f122b HTTP/1.1
+
+### Make a transaction: Luis sends $10 to Jane
+POST http://localhost:8080/transactions HTTP/1.1
+Content-Type: application/json
+
+{
+    "account_id_from": "7ebc23f5-dd1e-4d93-9490-9fce5052a5f5",
+    "account_id_to": "dff2d137-bba6-4138-81b9-3da7567f122b",
+    "amount": 10
+}
+
+### Wait a moment for Kafka processing
+
+### Check Luis's account balance (after transaction)
+GET http://localhost:3003/balances/7ebc23f5-dd1e-4d93-9490-9fce5052a5f5 HTTP/1.1
+
+### Check Jane's account balance (after transaction)
+GET http://localhost:3003/balances/dff2d137-bba6-4138-81b9-3da7567f122b HTTP/1.1
+
+### Make a transaction: Jane sends $35 back to Luis
+POST http://localhost:8080/transactions HTTP/1.1
+Content-Type: application/json
+
+{
+    "account_id_from": "dff2d137-bba6-4138-81b9-3da7567f122b",
+    "account_id_to": "7ebc23f5-dd1e-4d93-9490-9fce5052a5f5",
+    "amount": 35
+}
+
+### Wait a moment for Kafka processing
+### You can delay this request manually or add a script with sleep
+
+### Check Luis's final account balance
+GET http://localhost:3003/balances/7ebc23f5-dd1e-4d93-9490-9fce5052a5f5 HTTP/1.1
+
+### Check Jane's final account balance
+GET http://localhost:3003/balances/dff2d137-bba6-4138-81b9-3da7567f122b HTTP/1.1
